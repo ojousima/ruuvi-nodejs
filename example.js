@@ -1,4 +1,5 @@
 var BleUart = require('./ble-uart');
+var parser = require('./ruuvi.endpoints.js/index.js')
 
 // use a predefined UART service (nordic, redbear, laird, bluegiga)
 var bleSerial = new BleUart('nordic');
@@ -14,7 +15,8 @@ var bleSerial = new BleUart('nordic');
 // this function gets called when new data is received from
 // the Bluetooth LE serial service:
 bleSerial.on('data', function(data){
-  console.log("Got new data: " + String(data));
+  //console.log("Got new data: " + data);
+  parser(data);
 });
 
 // this function gets called when the program
