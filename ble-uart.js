@@ -103,7 +103,7 @@ var BleUart = function (name, options) {
   // The scanning function:
   function scan(state) {
     if (state === 'poweredOn') {    // if the radio's on, scan for this service
-      noble.startScanning([serviceUUID], false);
+      noble.startScanning([serviceUUID], true); //allow duplicates just in case we miss one
     }
     // emit a 'scanning' event:
     self.emit('scanning', state);
