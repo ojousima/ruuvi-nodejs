@@ -1,3 +1,6 @@
 [submodule "ruuvi.endpoints.js"]
 	path = ruuvi.endpoints.js
 	url = https://github.com/ruuvi/ruuvi.endpoints.js.git
+[submodule "iota.lib.js"]
+	path = iota.lib.js
+	url = https://github.com/iotaledger/iota.lib.js.git
