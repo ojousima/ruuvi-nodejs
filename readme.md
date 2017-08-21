@@ -22,8 +22,8 @@ Git submodule, init & update
 Install Noble->Readserial
 
 # Licensing
-Ruuvi / Ojousima: BSD-3
-iota libs: MIT
-BLE-UART: Unknown, please refer to [source](https://github.com/tigoe/BluetoothLE-Examples/issues/7)
-Noble: MIT 
+ * Ruuvi / Ojousima: BSD-3
+ * iota libs: MIT
+ * BLE-UART: Unknown, please refer to [source](https://github.com/tigoe/BluetoothLE-Examples/issues/7)
+ * Noble: MIT 
 
