@@ -9,7 +9,7 @@ MAM message parsing requres MAM-js libraries which aren't published yet.
 
 # Dependencies
 ## Noble
-[https://github.com/sandeepmistry/noble]
+[Noble repositry](https://github.com/sandeepmistry/noble)
 
 ## iota.lib.js
 Git submodule, init & update
@@ -18,12 +18,12 @@ Git submodule, init & update
 Git submodule, init & update
 
 ## ble-uart
-[https://github.com/tigoe/BluetoothLE-Examples]
+[ble-uart examples](https://github.com/tigoe/BluetoothLE-Examples)
 Install Noble->Readserial
 
-#Licensing
+# Licensing
 Ruuvi / Ojousima: BSD-3
 iota libs: MIT
-BLE-UART: Unknown, please refer to [https://github.com/tigoe/BluetoothLE-Examples/issues/7]
+BLE-UART: Unknown, please refer to [source](https://github.com/tigoe/BluetoothLE-Examples/issues/7)
 Noble: MIT 
 
