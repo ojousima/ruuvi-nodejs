@@ -2,6 +2,7 @@ var BleUart = require('./ble-uart');
 var dataHandler = require('./ruuvi.endpoints.js/index.js')
 var tryteConverter = require('./iota.lib.js/lib/utils/asciiToTrytes.js')
 var MAM = require('./iota-mam/mam')
+var sleep = require('sleep');
 
 https://stackoverflow.com/questions/6965107/converting-between-strings-and-arraybuffers
 function ab2str(buf) {
@@ -22,7 +23,7 @@ var bleSerial = new BleUart('nordic');
 // this function gets called when new data is received from
 // the Bluetooth LE serial service:
 bleSerial.on('data', function(data){
-  //console.log("Got new data: " + data);
+  console.log("Got new data: " + data);
   let message = dataHandler(data);
   if (message.ready){
     let res = (ab2str(message.binary)).split('\n');
@@ -41,11 +42,13 @@ bleSerial.on('data', function(data){
 // this function gets called when the program
 // establishes a connection with the remote BLE radio:
 bleSerial.on('connected', function(data){
-  console.log("Connected to BLE. Sending a hello message");
-  
+  console.log("Connected to BLE. Sending a hello message");  
   //bleSerial.write("Hello BLE!");
   //bleSerial.write([1,2,3,4,5]);
-  bleSerial.write(new Uint8Array([0x31,40,30,20,10,00,01,02,03,04,05]));
+  bleSerial.write(new Uint8Array([0x31,0x10,0x01,251,251,252,252,1,0,3,0]));
+  sleep.sleep(5);
+  bleSerial.write(new Uint8Array([0x31,0x10,0x05,0,0,0,0,0,0,0,0]));
+
   //bleSerial.write(new Buffer([6,7,8,9]))
 });
 

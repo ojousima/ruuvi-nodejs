@@ -14,12 +14,15 @@ MAM message parsing requres MAM-js libraries which aren't published yet.
 ## iota.lib.js
 Git submodule, init & update
 
-#ruuvi.endpoints.js
+## ruuvi.endpoints.js
 Git submodule, init & update
 
 ## ble-uart
 [ble-uart examples](https://github.com/tigoe/BluetoothLE-Examples)
 Install Noble->Readserial
+
+## Sleep
+sudo npm -g install sleep
 
 # Licensing
  * Ruuvi / Ojousima: BSD-3
