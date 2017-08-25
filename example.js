@@ -64,8 +64,18 @@ function ab2str(buf) {
   return String.fromCharCode.apply(null, new Uint8Array(buf));
 }
 
+
+
 // use a predefined UART service (nordic, redbear, laird, bluegiga)
 var bleSerial = new BleUart('nordic');
+var reconnTimer = null;
+function reConn() {
+  console.log("Connection failed. Retrying");
+  bleSerial.peripheral.disconnect();
+  bleSerial.scan('poweredOn');
+}
+
+
 
 // optionally define a custom service
 // var uart = {
@@ -111,6 +121,8 @@ bleSerial.on('data', function(data){
 // establishes a connection with the remote BLE radio:
 bleSerial.on('connected', function(data){
   console.log("Connected to BLE. Sending a hello message");  
+  clearTimeout(reconnTimer);
+  reconnTimer = null;
   timerExample();
   //bleSerial.write("Hello BLE!");
   //bleSerial.write([1,2,3,4,5]);
@@ -118,6 +130,14 @@ bleSerial.on('connected', function(data){
 
   //bleSerial.write(new Buffer([6,7,8,9]))
 });
+
+bleSerial.on('preparing', function(){
+   if(reconnTimer == null){
+   console.log("setting up retry timer");
+   reconnTimer = setTimeout(reConn, 5000);
+   }
+});
+
 
 // thus function gets called if the radio successfully starts scanning:
 bleSerial.on('scanning', function(status){
@@ -134,7 +154,7 @@ async function timerExample() {
   //bleSerial.write(new Uint8Array([0x31,0x10,0x05,0,0,0,0,0,0,0,0]));  
 }
 
-stdin.on('data', function(chunk) { 
+stdin.on('data', function(chunk) {
   if(chunk == '1\n')
   {
      console.log("Single shot"); 
