@@ -55,8 +55,8 @@ var checkService = function(name, uart) {
 
   if (Object.keys(uart).length === 0) {
     // Maybe the user typo'd the service name?
-    console.log("Expecting service name to be one of: " + Object.keys(knownUartServices).join(", ") + ".");
-    console.log("Or pass serviceUUID, txUUID, & rxUUID in object literal as second argument.");
+    //console.log("Expecting service name to be one of: " + Object.keys(knownUartServices).join(", ") + ".");
+    //console.log("Or pass serviceUUID, txUUID, & rxUUID in object literal as second argument.");
     error = true;
   } else {
     if (!uart.serviceUUID) {
@@ -75,7 +75,7 @@ var checkService = function(name, uart) {
 
   // TODO handle this better...
   if (error) {
-    console.log(name + " " + JSON.stringify(uart));
+    //console.log(name + " " + JSON.stringify(uart));
     process.exit(-1);
   }
 };
@@ -99,11 +99,12 @@ var BleUart = function (name, options) {
   self.connected = false;       // whether the remote peripheral's connected
   self.peripheral = null;       // the remote peripheral as an object
   EventEmitter.call(self);      // make a copy of EventEmitter so you can emit events
+  self.setMaxListeners(20);
 
   // The scanning function:
-  function scan(state) {
+  self.scan = function(state) {
     if (state === 'poweredOn') {    // if the radio's on, scan for this service
-      noble.startScanning([serviceUUID], true); //allow duplicates just in case we miss one
+      noble.startScanning([serviceUUID], false); 
     }
     // emit a 'scanning' event:
     self.emit('scanning', state);
@@ -117,11 +118,11 @@ var BleUart = function (name, options) {
     // the connect function. This is local to the discovery function
     // because it needs to know the peripheral to discover services:
     function discover() {
+      //console.log("Discovering");
       // once you know you have a peripheral with the desired
       // service, you can stop scanning for others:
-      noble.stopScanning();
       // get the service you want on this peripheral:
-      peripheral.discoverServices([serviceUUID],explore);
+      peripheral.discoverServices(null,explore);
     }
 
     // called only when the peripheral has the service you're looking for:
@@ -135,10 +136,12 @@ var BleUart = function (name, options) {
   function explore(error, services) {
     // this gets run by the for-loop at the end of the
     // explore function, below:
+    //console.log("Exploring");
     function getCharacteristics(error, characteristics) {
+        //console.log("Reading characteristics");
 
         characteristics.forEach(function(characteristic) {
-          //DEBUG console.log(characteristic.toString());
+          //console.log(characteristic.toString());
           if (characteristic.uuid === receiveUUID) {
             receive = characteristic;
 
@@ -177,8 +180,11 @@ var BleUart = function (name, options) {
     // iterate over the services discovered. If one matches
     // the UART service, look for its characteristics:
     for (var s in services) {
+      //console.log("Service found " + services[s].uuid + " comparing to " + serviceUUID + ": " + (services[s].uuid === serviceUUID));
       if (services[s].uuid === serviceUUID) {
-        services[s].discoverCharacteristics([], getCharacteristics);
+        //console.log("Match " + services[s]);
+        self.emit('preparing');
+        services[s].discoverCharacteristics(null, getCharacteristics);
         return;
       }
     }
@@ -203,10 +209,11 @@ var BleUart = function (name, options) {
   // the BLE disconnect function:
   self.disconnect = function() {
     self.connected = false;
+    self.discovering = false;
   };
 
   // when the radio turns on, start scanning:
-  noble.on('stateChange', scan);
+  noble.on('stateChange', self.scan);
   // if you discover a peripheral with the appropriate service, connect:
   noble.on('discover', self.connect);
 };
