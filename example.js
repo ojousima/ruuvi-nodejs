@@ -8,7 +8,8 @@ var sleep = require('sleep');
 var stdin = process.openStdin();
 var singleShotTemperature = new Uint8Array([0x31,0x10,0x01,251,251,252,252,1,0,2,0]);
 var continuousTemperature = new Uint8Array([0x31,0x10,0x01,1,251,252,252,1,0,2,0]);
-var queryTemperature      = new Uint8Array([0x31,0x10,0x05,0,0,0,0,0,0,0,0]);  
+var queryTemperature      = new Uint8Array([0x31,0x10,0x05,0,0,0,0,0,0,0,0]);
+var queryMAM              = new Uint8Array([0xE0,0x10,0x05,0,0,0,0,0,0,0,0]);  //XXX PoC for hackathon, only destination matters    
 
 https://stackoverflow.com/questions/6965107/converting-between-strings-and-arraybuffers
 function ab2str(buf) {
@@ -29,7 +30,7 @@ var bleSerial = new BleUart('nordic');
 // this function gets called when new data is received from
 // the Bluetooth LE serial service:
 bleSerial.on('data', function(data){
-  console.log("Got new data: " + data);
+  //console.log("Got new data: " + data);
   let message = dataHandler(data);
   if (message.ready){
     let res = (ab2str(message.binary)).split('\n');
@@ -66,7 +67,7 @@ async function timerExample() {
   //console.log('Before I/O callbacks');
   await setImmediatePromise();
   console.log('Connection ready.');
-  console.log('1) singleshot 2) continous 3)  query.');
+  console.log('1) singleshot 2) continous 3) query. 4) Get MAM data');
   //bleSerial.write(new Uint8Array([0x31,0x10,0x01,251,251,252,252,1,0,2,0]));
   //sleep.sleep(5);
   //bleSerial.write(new Uint8Array([0x31,0x10,0x05,0,0,0,0,0,0,0,0]));  
@@ -87,6 +88,11 @@ stdin.on('data', function(chunk) {
   {
     console.log("Query data"); 
     bleSerial.write(queryTemperature);
+  }
+  if(chunk == '4\n')
+  {
+    console.log("Asking for MAM"); 
+    bleSerial.write(queryMAM);
   }
   }
 );
