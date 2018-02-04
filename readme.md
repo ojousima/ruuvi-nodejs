@@ -1,9 +1,6 @@
 # NOTICE
-As of right now, changes in FFI interface prevent ccurl.interface.js from compiling. 
-This means that the project is not in useable state. 
-
-For more details, please see [FFI](https://www.npmjs.com/package/ffi) status
-and 
+As of right now, changes in FFI interface prevent ccurl.interface.js from compiling in NodeJS 9+
+Please use NodeJS 8.9.4
 
 # Usage
 Program searches for RuuviTag which has Nordic UART service enabled
