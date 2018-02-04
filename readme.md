@@ -50,7 +50,7 @@ This repository is tested on nodejs 8.9.4, check your version with `node --versi
 
 `npm install ccurl.interface.js`
 
-`cp raspberrypi-bin/libbcurl.so node_modules/ccurl.interface.js
+`cp raspberrypi-bin/libbcurl.so node_modules/ccurl.interface.js`
 
 ## Sleep
 `npm install sleep`
