@@ -45,9 +45,13 @@ This repository is tested on nodejs 8.9.4, check your version with `node --versi
 
 ## iota.lib.js, ruuvi.endpoints.js ccurl.interface.js
 `git submodule update --init --recursive`
+
 `npm install iota.lib.js`
+
 `npm install ccurl.interface.js`
-mv 
+
+`cp raspberrypi-bin/libbcurl.so node_modules/ccurl.interface.js
+
 
 ## ble-uart
 [ble-uart examples](https://github.com/tigoe/BluetoothLE-Examples)
